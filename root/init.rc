@@ -67,7 +67,6 @@ loglevel 3
     write /proc/sys/kernel/sched_wakeup_granularity_ns 2000000
     write /proc/sys/kernel/sched_compat_yield 1
     write /proc/sys/kernel/sched_child_runs_first 0
-    write /proc/sys/kernel/randomize_va_space 2
 
 # Create cgroup mount points for process groups
     mkdir /dev/cpuctl
@@ -186,6 +185,8 @@ on post-fs-data
 
     chown system system /sys/class/android_usb/android0/f_mass_storage/lun/file
     chmod 0660 /sys/class/android_usb/android0/f_mass_storage/lun/file
+    chown system system /sys/devices/platform/s3c-usbgadget/gadget/lun1/file
+    chmod 0660 /sys/devices/platform/s3c-usbgadget/gadget/lun1/file
     chown system system /sys/class/android_usb/android0/f_rndis/ethaddr
     chmod 0660 /sys/class/android_usb/android0/f_rndis/ethaddr
 
@@ -383,8 +384,6 @@ service servicemanager /system/bin/servicemanager
     critical
     onrestart restart zygote
     onrestart restart media
-    onrestart restart surfaceflinger
-    onrestart restart drm
 
 service vold /system/bin/vold
     class core
@@ -404,7 +403,7 @@ service ril-daemon /system/bin/rild
     socket rild stream 660 root radio
     socket rild-debug stream 660 radio system
     user root
-    group radio cache inet misc audio sdcard_rw qcom_oncrpc diag
+    group radio cache inet misc audio sdcard_rw log
 
 service surfaceflinger /system/bin/surfaceflinger
     class main
@@ -484,3 +483,4 @@ service dumpstate /system/bin/dumpstate -s
     socket dumpstate stream 0660 shell log
     disabled
     oneshot
+

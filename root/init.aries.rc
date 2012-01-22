@@ -34,7 +34,7 @@ on boot
     setprop ro.radio.noril yes
 
     setprop ro.crypto.keyfile.userdata /efs/userdata_footer
-
+    
 # fake some battery state
     setprop status.battery.state Slow
     setprop status.battery.level 5
@@ -196,7 +196,6 @@ service orientationd /system/vendor/bin/orientationd
     class late_start
     user compass
     group system input
-    disabled
 
 service geomagneticd /system/vendor/bin/geomagneticd
     class late_start
@@ -212,3 +211,10 @@ service tvouthack /system/bin/tvouthack
     user system
     group graphics
     disabled
+
+service runpa /system/bin/sysinit
+    class main
+    user root
+    group root
+    oneshot    
+    
