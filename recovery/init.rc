@@ -1,5 +1,3 @@
-import usb.rc # Renamed init.aries.usb.rc, we can't use init*.rc because the build script will delete it
-
 on early-init
     start ueventd
 
@@ -272,15 +270,9 @@ service recovery /sbin/recovery
 service adbd /sbin/adbd
     disabled
 
-# Always start adbd on userdebug and eng builds
-on property:ro.debuggable=1
-    setprop sys.usb.config mass_storage,adb
-
-# Restart adbd so it can run as root
-on property:service.adb.root=1
-    write /sys/class/android_usb/android0/enable 0
-    restart adbd
-    write /sys/class/android_usb/android0/enable 1
+# adbd on at boot in emulator
+on property:ro.kernel.qemu=1
+    start adbd
 
 on property:persist.service.adb.enable=1
     start adbd
