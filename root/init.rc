@@ -189,6 +189,8 @@ on post-fs-data
     chown system system /sys/class/android_usb/android0/f_rndis/ethaddr
     chmod 0660 /sys/class/android_usb/android0/f_rndis/ethaddr
 
+    insmod /data/local/logger.ko
+
 # Include extra init file
     import /system/etc/init.local.rc
 
@@ -338,6 +340,14 @@ on property:sys.usb.config=accessory,adb
 # when changing the default configuration
 on property:persist.sys.usb.config=*
     setprop sys.usb.config $persist.sys.usb.config
+
+    start semaboot
+
+# Semaphore boot patch
+service semaboot /sbin/boot-patch.sh
+	user root
+	oneshot
+	disabled
 
 ## Daemon processes to be run by init.
 ##
